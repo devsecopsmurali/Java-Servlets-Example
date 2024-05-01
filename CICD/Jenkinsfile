@@ -37,7 +37,25 @@ pipeline{
             }
         }
 
-    
+    stage('Code Analysis with SonarQube') {
+
+  environment {
+    scannerHome = tool("${SONARSCANNER}")  // Assuming SONARSCANNER is a pre-defined tool
+  }
+
+  steps {
+    withSonarQubeEnv("${SONARSERVER}") {
+      sh '''
+        ${scannerHome}/bin/sonar-scanner \
+          -Dsonar.projectKey=Java-Servlets-Example \
+          -Dsonar.host.url=http://18.207.0.26 \
+          -Dsonar.projectVersion=1.0 \
+          -Dsonar.login=29052d922b10bf0eed7cd1c8cac13759b85bbbd4
+      '''
+    }
+  }
+}
+
 
                  stage("Publish to Nexus Repository Manager") {
             steps {
