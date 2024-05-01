@@ -37,17 +37,6 @@ pipeline{
             }
         }
 
-stage ('CODE ANALYSIS WITH CHECKSTYLE'){
-            steps {
-                sh 'mvn checkstyle:checkstyle'
-            }
-            post {
-                success {
-                    echo 'Generated Analysis Result'
-                }
-            }
-        }
-
         stage('CODE ANALYSIS with SONARQUBE') {
           
 		  environment {
@@ -63,7 +52,7 @@ stage ('CODE ANALYSIS WITH CHECKSTYLE'){
             }
           }
         }
-
+}
                  stage("Publish to Nexus Repository Manager") {
             steps {
                 script {
