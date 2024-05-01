@@ -50,6 +50,7 @@ pipeline{
           -Dsonar.projectKey=Java-Servlets-Example \
           -Dsonar.host.url=http://18.207.0.26 \
           -Dsonar.projectVersion=1.0 \
+	  -Dsonar.sources=src/main/java \
           -Dsonar.login=29052d922b10bf0eed7cd1c8cac13759b85bbbd4
       '''
     }
