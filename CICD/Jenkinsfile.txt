@@ -14,12 +14,14 @@ pipeline{
         ARTVERSION = "${env.BUILD_ID}"
         NEXUS_CREDENTIAL_ID ="nexus-credentials"
 	NEXUS_URL = "52.73.31.118:8081"
+        SONARSERVER="sonarserver"
+        SONARSCANNER="sonarscanner"
     }
 
     stages{
          stage('version-ctrl'){
             steps{
-                 git branch: 'nexus_jenkins', url: 'https://github.com/devsecopsmurali/Java_Web_App.git'
+                 git branch: 'main', url: 'https://github.com/devsecopsmurali/Java-Servlets-Example.git'
             }
         }
         
@@ -33,6 +35,33 @@ pipeline{
                     archiveArtifacts artifacts: '**/target/*.war'
                 }
             }
+        }
+
+stage ('CODE ANALYSIS WITH CHECKSTYLE'){
+            steps {
+                sh 'mvn checkstyle:checkstyle'
+            }
+            post {
+                success {
+                    echo 'Generated Analysis Result'
+                }
+            }
+        }
+
+        stage('CODE ANALYSIS with SONARQUBE') {
+          
+		  environment {
+             scannerHome = tool "${SONARSCANNER}"
+          }
+
+          steps {
+            withSonarQubeEnv("${SONARSERVER}") {
+               sh '''${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=Java-Servlets-Example \
+                   -Dsonar.host.url=http://18.207.0.26 \
+                   -Dsonar.projectVersion=1.0 \
+                   -Dsonar.login=29052d922b10bf0eed7cd1c8cac13759b85bbbd4
+            }
+          }
         }
 
                  stage("Publish to Nexus Repository Manager") {
